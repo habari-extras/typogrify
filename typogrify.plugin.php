@@ -1,6 +1,11 @@
 <?php
 
-	class Typogrify extends Plugin {
+	/**
+	 * Makes text pretty.
+	 * 
+	 * @todo Refactor the rest of the PHP-Typogrify and SmartyPants code into the Typogrify class so we don't have a ton of global functions.
+	 */
+	class Typogrify_Plugin extends Plugin {
 		
 		const VERSION = '0.1';
 		
@@ -12,7 +17,7 @@
 				'author' => 'Habari Community',
 				'authorurl' => 'http://habariproject.org',
 				'version' => self::VERSION,
-				'description' => '',
+				'description' => 'Makes text pretty!',
 				'license' => 'Apache License 2.0',
 			);
 			
@@ -55,6 +60,9 @@
 					$form->special_options->append( 'checkbox', 'do_guillements', 'typogrify__do_guillements', _t( 'Add <code>&lt;span class=&quot;dquo&quot;&gt;</code> to initial <a href="http://en.wikipedia.org/wiki/Guillemet">Guillemets</a> (&laquo; or &raquo;) as well.' ) );
 					$form->special_options->append( 'checkbox', 'do_dash', 'typogrify__do_dash', _t( 'Add thin spaces (<code>&amp;thinsp;</code>) to both sides of em and en dashes.' ) );
 					
+					$form->append( 'fieldset', 'additional_options', 'Additional Options' );
+					$form->additional_options->append( 'checkbox', 'do_title_case', 'typogrify__title_case', _t( 'Attempt to properly capitalize post titles based on <a href="http://daringfireball.net/2008/05/title_case">rules</a> by John Gruber.' ) );
+					
 					$form->append( 'submit', 'save', _t( 'Save' ) );
 					
 					$form->on_success( array( $this, 'updated_config' ) );
@@ -84,6 +92,7 @@
 				$options[ 'typogrify__do_initial_quotes' ] = 1;
 				$options[ 'typogrify__do_guillements' ] = 1;
 				$options[ 'typogrify__do_dash' ] = 1;
+				$options[ 'typogrify__title_case' ] = 1;
 				
 				foreach ( $options as $option => $value ) {
 					
@@ -132,6 +141,10 @@
 		}
 		
 		public function filter_post_title_out ( $title ) {
+			
+			if ( Options::get( 'typogrify__title_case' ) ) {
+				$title = Typogrify::title_case( $title );
+			}
 			
 			return $this->filter( $title );
 			
@@ -186,6 +199,9 @@
 		public function action_init ( ) {
 			
 			include( 'php-typogrify.php' );
+			
+			// include the typogrify class
+			require( 'typogrify.php' );
 			
 		}
 		

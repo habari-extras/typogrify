@@ -9,20 +9,6 @@
 		
 		const VERSION = '0.1';
 		
-		public function info ( ) {
-			
-			return array(
-				'name' => 'Typogrify',
-				'url' => 'http://habariproject.org',
-				'author' => 'Habari Community',
-				'authorurl' => 'http://habariproject.org',
-				'version' => self::VERSION,
-				'description' => 'Makes text pretty!',
-				'license' => 'Apache License 2.0',
-			);
-			
-		}
-		
 		public function action_update_check ( ) {
 			
 			Update::add( 'Typogrify', '757310B4-6A86-11DD-A4F6-207155D89593', $this->info->version );

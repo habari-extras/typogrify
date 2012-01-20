@@ -103,7 +103,10 @@
 			}
 			
 			if ( Options::get( 'typogrify__do_smartypants' ) ) {
-				$text = SmartyPants( $text );
+			 	// Standard options plus convert_quot ('w') to
+			 	// convert &quot; entities, that Habari might
+			 	// already have converted '"' characters into.
+				$text = SmartyPants( $text, "qbdew" );
 			}
 			
 			if ( Options::get( 'typogrify__do_caps' ) ) {

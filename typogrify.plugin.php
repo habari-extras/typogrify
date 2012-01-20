@@ -103,7 +103,10 @@
 			}
 			
 			if ( Options::get( 'typogrify__do_smartypants' ) ) {
-				$text = SmartyPants( $text );
+			 	// Standard options plus convert_quot ('w') to
+			 	// convert &quot; entities, that Habari might
+			 	// already have converted '"' characters into.
+				$text = SmartyPants( $text, "qbdew" );
 			}
 			
 			if ( Options::get( 'typogrify__do_caps' ) ) {
@@ -145,7 +148,7 @@
 			
 		}
 		
-		public function filter_post_excerpt_out ( $excerpt ) {
+		public function filter_post_content_excerpt_out ( $excerpt ) {
 			
 			return $this->filter( $excerpt );
 			
@@ -169,6 +172,43 @@
 			
 		}
 		
+		public function filter_post_title_atom ( $title ) {
+			
+			if ( Options::get( 'typogrify__title_case' ) ) {
+				$title = Typogrify::title_case( $title );
+			}
+			
+			// for now, just bypass the rest of the filters - they cause problems ATM
+			// return $title;
+			
+			return $this->filter( $title );
+			
+		}
+		
+		public function filter_post_content_atom ( $content ) {
+			
+			return $this->filter( $content );
+			
+		}
+		
+		public function filter_post_content_excerpt_atom ( $excerpt ) {
+			
+			return $this->filter( $excerpt );
+			
+		}
+		
+		public function filter_comment_content_atom ( $comment ) {
+			
+			return $this->filter( $comment );
+			
+		}
+		
+		public function filter_comment_name_atom ( $name ) {
+			
+			return $this->filter( $name );
+			
+		}
+		
 		/**
 		 * Set all our filters to run after everything else did
 		 */
@@ -177,10 +217,16 @@
 			return array(
 				'filter_post_title_out' => 10,
 				'filter_post_content_out' => 10,
-				'filter_post_excerpt_out' => 10,
+				'filter_post_content_excerpt_out' => 10,
 				'filter_comment_content_out' => 10,
 				'filter_comment_name_out' => 10,
 				'filter_post_tags_out' => 10,
+				
+				'filter_post_title_atom' => 10,
+				'filter_post_content_atom' => 10,
+				'filter_post_content_excerpt_atom' => 10,
+				'filter_comment_content_atom' => 10,
+				'filter_comment_name_atom' => 10,
 			);
 			
 		}

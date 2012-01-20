@@ -148,7 +148,7 @@
 			
 		}
 		
-		public function filter_post_excerpt_out ( $excerpt ) {
+		public function filter_post_content_excerpt_out ( $excerpt ) {
 			
 			return $this->filter( $excerpt );
 			
@@ -180,7 +180,7 @@
 			return array(
 				'filter_post_title_out' => 10,
 				'filter_post_content_out' => 10,
-				'filter_post_excerpt_out' => 10,
+				'filter_post_content_excerpt_out' => 10,
 				'filter_comment_content_out' => 10,
 				'filter_comment_name_out' => 10,
 				'filter_post_tags_out' => 10,

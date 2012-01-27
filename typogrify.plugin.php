@@ -6,15 +6,7 @@
 	 * @todo Refactor the rest of the PHP-Typogrify and SmartyPants code into the Typogrify class so we don't have a ton of global functions.
 	 */
 	class Typogrify_Plugin extends Plugin {
-		
-		const VERSION = '0.1';
-		
-		public function action_update_check ( ) {
-			
-			Update::add( 'Typogrify', '757310B4-6A86-11DD-A4F6-207155D89593', $this->info->version );
-			
-		}
-		
+
 		public function filter_plugin_config ( $actions, $plugin_id ) {
 			
 			if ( $plugin_id == $this->plugin_id() ) {

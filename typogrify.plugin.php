@@ -4,29 +4,29 @@
 
 	/**
 	 * Makes text pretty.
-	 * 
+	 *
 	 * @todo Refactor the rest of the PHP-Typogrify and SmartyPants code into the Typogrify class so we don't have a ton of global functions.
 	 */
 	class Typogrify_Plugin extends Plugin {
 
 		public function filter_plugin_config ( $actions, $plugin_id ) {
-			
+
 			if ( $plugin_id == $this->plugin_id() ) {
 				$actions[] = _t( 'Configure' );
 			}
-			
+
 			return $actions;
-			
+
 		}
-		
+
 		public function action_plugin_ui ( $plugin_id, $action ) {
-			
+
 			if ( $plugin_id == $this->plugin_id() ) {
-				
+
 				if ( $action == _t( 'Configure' ) ) {
-					
+
 					$class_name = strtolower( get_class( $this ) );
-					
+
 
 					$ui = new FormUI( $class_name );
 
@@ -50,14 +50,14 @@
 
 					$ui->out();
 				}
-				
+
 			}
 		}
-		
+
 		public function action_plugin_activation ( $file ) {
-			
+
 			if ( Plugins::id_from_file( $file ) == Plugins::id_from_file( __FILE__ ) ) {
-				
+
 				// default options: name => default value
 				$options[ 'typogrify__do_amp' ] = 1;
 				$options[ 'typogrify__do_widont' ] = 1;
@@ -67,141 +67,141 @@
 				$options[ 'typogrify__do_guillements' ] = 1;
 				$options[ 'typogrify__do_dash' ] = 1;
 				$options[ 'typogrify__title_case' ] = 1;
-				
+
 				foreach ( $options as $option => $value ) {
-					
+
 					if ( Options::get( $option ) == null ) {
 						Options::set( $option, $value );
 					}
-					
+
 				}
-				
+
 			}
-			
+
 		}
-		
+
 		public function filter ( $text ) {
-			
+
 			if ( Options::get( 'typogrify__do_amp' ) ) {
 				$text = amp( $text );
 			}
-			
+
 			if ( Options::get( 'typogrify__do_widont' ) ) {
 				$text = widont( $text );
 			}
-			
+
 			if ( Options::get( 'typogrify__do_smartypants' ) ) {
 			 	// Standard options plus convert_quot ('w') to
 			 	// convert &quot; entities, that Habari might
 			 	// already have converted '"' characters into.
 				$text = SmartyPants( $text, "qbdew" );
 			}
-			
+
 			if ( Options::get( 'typogrify__do_caps' ) ) {
 				$text = caps( $text );
 			}
-			
+
 			if ( Options::get( 'typogrify__do_initial_quotes' ) ) {
 				$text = initial_quotes( $text );
 			}
-			
+
 			if ( Options::get( 'typogrify__do_guillemets' ) ) {
 				$text = initial_quotes( $text, true );
 			}
-			
+
 			if ( Options::get( 'typogrify__do_dash' ) ) {
 				$text = dash( $text );
 			}
-			
+
 			return $text;
-			
+
 		}
-		
+
 		public function filter_post_title_out ( $title ) {
-			
+
 			if ( Options::get( 'typogrify__title_case' ) ) {
 				$title = \Typogrify::title_case( $title );
 			}
-			
+
 			// for now, just bypass the rest of the filters - they cause problems ATM
 			// return $title;
-			
+
 			return $this->filter( $title );
-			
+
 		}
-		
+
 		public function filter_post_content_out ( $content ) {
-			
+
 			return $this->filter( $content );
-			
+
 		}
-		
+
 		public function filter_post_content_excerpt_out ( $excerpt ) {
-			
+
 			return $this->filter( $excerpt );
-			
+
 		}
-		
+
 		public function filter_comment_content_out ( $comment ) {
-			
+
 			return $this->filter( $comment );
-			
+
 		}
-		
+
 		public function filter_comment_name_out ( $name ) {
-			
+
 			return $this->filter( $name );
-			
+
 		}
-		
+
 		public function filter_post_tags_out ( $tags ) {
-			
+
 			return $this->filter( $tags );
-			
+
 		}
-		
+
 		public function filter_post_title_atom ( $title ) {
-			
+
 			if ( Options::get( 'typogrify__title_case' ) ) {
 				$title = \Typogrify::title_case( $title );
 			}
-			
+
 			// for now, just bypass the rest of the filters - they cause problems ATM
 			// return $title;
 			
 			return $this->filter( $title );
-			
+
 		}
-		
+
 		public function filter_post_content_atom ( $content ) {
-			
+
 			return $this->filter( $content );
-			
+
 		}
-		
+
 		public function filter_post_content_excerpt_atom ( $excerpt ) {
-			
+
 			return $this->filter( $excerpt );
-			
+
 		}
-		
+
 		public function filter_comment_content_atom ( $comment ) {
-			
+
 			return $this->filter( $comment );
-			
+
 		}
-		
+
 		public function filter_comment_name_atom ( $name ) {
-			
+
 			return $this->filter( $name );
-			
+
 		}
-		
+
 		/**
 		 * Set all our filters to run after everything else did
 		 */
 		public function set_priorities ( ) {
-			
+
 			return array(
 				'filter_post_title_out' => 10,
 				'filter_post_content_out' => 10,
@@ -209,25 +209,25 @@
 				'filter_comment_content_out' => 10,
 				'filter_comment_name_out' => 10,
 				'filter_post_tags_out' => 10,
-				
+
 				'filter_post_title_atom' => 10,
 				'filter_post_content_atom' => 10,
 				'filter_post_content_excerpt_atom' => 10,
 				'filter_comment_content_atom' => 10,
 				'filter_comment_name_atom' => 10,
 			);
-			
+
 		}
-		
+
 		public function action_init ( ) {
-			
+
 			include( 'php-typogrify.php' );
-			
+
 			// include the typogrify class
 			require( 'typogrify.php' );
-			
+
 		}
-		
+
 	}
 
 ?>

@@ -124,9 +124,7 @@
 			}
 
 			// for now, just bypass the rest of the filters - they cause problems ATM
-			// return $title;
-
-			return $this->filter( $title );
+			return $title;
 
 		}
 
@@ -167,9 +165,7 @@
 			}
 
 			// for now, just bypass the rest of the filters - they cause problems ATM
-			// return $title;
-			
-			return $this->filter( $title );
+			return $title;
 
 		}
 

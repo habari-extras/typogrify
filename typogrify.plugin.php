@@ -27,27 +27,28 @@
 					
 					$class_name = strtolower( get_class( $this ) );
 					
-					$form = new FormUI( $class_name );
-					
-					$form->append( 'fieldset', 'standard_options', 'Standard Options' );
-					$form->standard_options->append( 'checkbox', 'do_amp', 'typogrify__do_amp', _t( 'Add <code>&lt;span class=&quot;amp&quot;&gt;</code> to ampersands.') );
-					$form->standard_options->append( 'checkbox', 'do_widont', 'typogrify__do_widont', _t( 'Try to prevent <a href="http://en.wikipedia.org/wiki/Widows_and_orphans">widows</a> by adding <code>&amp;nbsp;</code> between the last two words in blocks of text.' ) );
-					$form->standard_options->append( 'checkbox', 'do_smartypants', 'typogrify__do_smartypants', _t( 'Apply <a href="http://michelf.com/projects/php-smartypants/">SmartyPants</a> to text.' ) );
-					$form->standard_options->append( 'checkbox', 'do_caps', 'typogrify__do_caps', _t( 'Add <code>&lt;span class=&quot;caps&quot;&gt;</code> to consecutive capital letters (acronyms, etc.).' ) );
-					$form->standard_options->append( 'checkbox', 'do_initial_quotes', 'typogrify__do_initial_quotes', _t( 'Add <code>&lt;span class=&quot;dquo&quot;&gt;</code> to initial double quotes, and <code>&lt;span class=&quot;quo&quot;&gt;</code> to initial single quotes.' ) );
-					
-					$form->append( 'fieldset', 'special_options', 'Special Options' );
-					$form->special_options->append( 'checkbox', 'do_guillements', 'typogrify__do_guillements', _t( 'Add <code>&lt;span class=&quot;dquo&quot;&gt;</code> to initial <a href="http://en.wikipedia.org/wiki/Guillemet">Guillemets</a> (&laquo; or &raquo;) as well.' ) );
-					$form->special_options->append( 'checkbox', 'do_dash', 'typogrify__do_dash', _t( 'Add thin spaces (<code>&amp;thinsp;</code>) to both sides of em and en dashes.' ) );
-					
-					$form->append( 'fieldset', 'additional_options', 'Additional Options' );
-					$form->additional_options->append( 'checkbox', 'do_title_case', 'typogrify__title_case', _t( 'Attempt to properly capitalize post titles based on <a href="http://daringfireball.net/2008/05/title_case">rules</a> by John Gruber.' ) );
-					
-					$form->append( 'submit', 'save', _t( 'Save' ) );
-					
-					$form->on_success( array( $this, 'updated_config' ) );
-					$form->out();
-					
+
+					$ui = new FormUI( $class_name );
+
+					$ui->append( FormControlFieldset::create( 'standard' )->set_caption( _t( 'Standard Options', 'typogrify' ) ) );
+
+					$ui->standard->append( FormControlLabel::wrap( _t( 'Add <code>&lt;span class=&quot;amp&quot;&gt;</code> to ampersands.', 'typogrify' ), FormControlCheckbox::create( 'do_amp', 'option:typogrify__do_amp' ) ) );
+					$ui->standard->append( FormControlLabel::wrap( _t( 'Try to prevent <a href="http://en.wikipedia.org/wiki/Widows_and_orphans">widows</a> by adding <code>&amp;nbsp;</code> between the last two words in blocks of text.', 'typogrify' ), FormControlCheckbox::create( 'do_widont', 'option:typogrify__do_widont' ) ) );
+					$ui->standard->append( FormControlLabel::wrap( _t( 'Apply <a href="http://michelf.com/projects/php-smartypants/">SmartyPants</a> to text.', 'typogrify' ), FormControlCheckbox::create( 'do_smartypants', 'option:typogrify__do_smartypants' ) ) );
+					$ui->standard->append( FormControlLabel::wrap( _t( 'Add <code>&lt;span class=&quot;caps&quot;&gt;</code> to consecutive capital letters (acronyms, etc.).', 'typogrify' ), FormControlCheckbox::create( 'do_caps', 'option:typogrify__do_caps' ) ) );
+					$ui->standard->append( FormControlLabel::wrap( _t( 'dd <code>&lt;span class=&quot;dquo&quot;&gt;</code> to initial double quotes, and <code>&lt;span class=&quot;quo&quot;&gt;</code> to initial single quotes.', 'typogrify' ), FormControlCheckbox::create( 'do_initial_quotes', 'option:typogrify__do_initial_quotes' ) ) );
+
+					$ui->append( FormControlFieldset::create( 'special' )->set_caption( _t( 'Special Options', 'typogrify' ) ) );
+
+					$ui->special->append( FormControlLabel::wrap( _t( 'Add <code>&lt;span class=&quot;dquo&quot;&gt;</code> to initial <a href="http://en.wikipedia.org/wiki/Guillemet">Guillemets</a> (&laquo; or &raquo;) as well.', 'typogrify' ), FormControlCheckbox::create( 'do_guillements', 'option:typogrify__do_guillements' ) ) );
+					$ui->special->append( FormControlLabel::wrap( _t( 'Add thin spaces (<code>&amp;thinsp;</code>) to both sides of em and en dashes.', 'typogrify' ), FormControlCheckbox::create( 'do_dash', 'option:typogrify__do_dash' ) ) );
+
+					$ui->append( FormControlFieldset::create( 'additional' )->set_caption( _t( 'Additional Options', 'typogrify' ) ) );
+					$ui->additional->append( FormControlLabel::wrap( _t( 'Attempt to properly capitalize post titles based on <a href="http://daringfireball.net/2008/05/title_case">rules</a> by John Gruber.', 'typogrify' ), FormControlCheckbox::create( 'do_title_case', 'option:typogrify__title_case' ) ) );
+
+					$ui->append( 'submit', 'save', _t( 'Save' ) );
+
+					$ui->out();
 				}
 				
 			}

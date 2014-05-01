@@ -52,13 +52,6 @@
 				}
 				
 			}
-			
-		}
-		
-		public function updated_config ( $form ) {
-			
-			$form->save();
-			
 		}
 		
 		public function action_plugin_activation ( $file ) {
